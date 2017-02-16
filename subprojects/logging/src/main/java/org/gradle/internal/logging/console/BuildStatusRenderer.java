@@ -29,6 +29,7 @@ import org.gradle.internal.nativeintegration.console.ConsoleMetaData;
 import java.util.Arrays;
 
 public class BuildStatusRenderer implements OutputEventListener {
+    public static final String BUILD_PROGRESS_CATEGORY = "org.gradle.internal.progress.BuildProgressLogger";
     private final OutputEventListener listener;
     private final StyledLabel buildStatusLabel;
     private final Console console;
@@ -60,7 +61,7 @@ public class BuildStatusRenderer implements OutputEventListener {
         if (event instanceof ProgressStartEvent) {
             ProgressStartEvent startEvent = (ProgressStartEvent) event;
             // if it has no parent ID, assign this operation as the root operation
-            if (startEvent.getParentId() == null && "org.gradle.internal.progress.BuildProgressLogger".equals(startEvent.getCategory())) {
+            if (startEvent.getParentId() == null && BUILD_PROGRESS_CATEGORY.equals(startEvent.getCategory())) {
                 rootOperationId = startEvent.getOperationId();
                 buildStarted(startEvent);
             }
@@ -83,9 +84,8 @@ public class BuildStatusRenderer implements OutputEventListener {
         for (OutputEvent event : events) {
             onOutput(event);
         }
-
-        renderNow();
         listener.onOutput(events);
+        renderNow();
     }
 
     private String trimToConsole(String str) {

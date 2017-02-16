@@ -79,8 +79,8 @@ public class WorkInProgressRenderer implements OutputEventListener {
         for (OutputEvent event : events) {
             onOutput(event);
         }
-        renderNow();
         listener.onOutput(events);
+        renderNow();
     }
 
     private void attach(ProgressOperation operation) {
